@@ -324,10 +324,7 @@ Copyright © 2024 DATAMETRIA. Todos os direitos reservados.
 
 ## 📞 Suporte
 
-- **Email**: suporte@datametria.io
-- **Discord**: [discord.gg/kKYGmCC3](https://discord.gg/kKYGmCC3)
-- **GitHub Issues**: [Issues](https://github.com/datametria/px-platform/issues)
-- **Documentação**: [docs.px-platform.com](https://docs.px-platform.com)
+- **Email**: dalila.rodrigues@datametria.io
 
 ---
 
