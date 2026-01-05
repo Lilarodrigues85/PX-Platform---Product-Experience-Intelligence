@@ -1,0 +1,23 @@
+# US-002 & US-003: API de Ingestão e Processamento
+# Requirements para Epic 1: Event Tracking Foundation
+
+# FastAPI e dependências
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.2
+
+# Processamento de eventos
+httpx==0.25.2
+user-agents==2.2.0
+geoip2==4.7.0
+
+# Desenvolvimento e testes
+pytest==7.4.3
+pytest-asyncio==0.21.1
+black==23.12.0
+mypy==1.7.1
+
+# Produção (comentado para MVP)
+# kafka-python==2.0.2
+# redis==5.0.1
+# clickhouse-driver==0.2.6

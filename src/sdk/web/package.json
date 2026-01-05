@@ -1,0 +1,35 @@
+{
+  "name": "@px-platform/sdk",
+  "version": "1.0.0",
+  "description": "PX Platform Web SDK for event tracking",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "jest",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "analytics",
+    "product-experience",
+    "event-tracking",
+    "px-platform"
+  ],
+  "author": "DATAMETRIA",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "jest": "^29.0.0",
+    "@types/jest": "^29.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/datametria/px-platform.git"
+  },
+  "homepage": "https://px-platform.com"
+}

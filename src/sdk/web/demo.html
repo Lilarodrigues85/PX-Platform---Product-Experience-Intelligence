@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PX Platform SDK Demo</title>
+</head>
+<body>
+    <h1>PX Platform SDK Demo</h1>
+    
+    <div>
+        <button id="signup-btn">Sign Up</button>
+        <button id="purchase-btn">Purchase</button>
+        <button id="custom-event-btn">Custom Event</button>
+    </div>
+
+    <div id="output"></div>
+
+    <script type="module">
+        // Import PX SDK (in production, install via npm)
+        import PX from './src/sdk/web/index.ts';
+
+        // Initialize PX Platform
+        PX.init({
+            apiKey: 'px_test_1234567890abcdef',
+            projectId: 'proj_demo_uuid',
+            endpoint: 'http://localhost:8000',
+            debug: true
+        });
+
+        // Identify user
+        PX.identify('user_123', {
+            email: 'user@example.com',
+            plan: 'pro'
+        });
+
+        // Track button clicks
+        document.getElementById('signup-btn').addEventListener('click', () => {
+            PX.track('signup_started', {
+                source: 'demo_page',
+                button_text: 'Sign Up'
+            });
+            log('Tracked: signup_started');
+        });
+
+        document.getElementById('purchase-btn').addEventListener('click', () => {
+            PX.track('purchase_completed', {
+                amount: 99.99,
+                currency: 'USD',
+                product: 'Pro Plan'
+            });
+            log('Tracked: purchase_completed');
+        });
+
+        document.getElementById('custom-event-btn').addEventListener('click', () => {
+            PX.track('custom_action', {
+                action_type: 'demo',
+                timestamp: new Date().toISOString()
+            });
+            log('Tracked: custom_action');
+        });
+
+        // Utility function
+        function log(message) {
+            const output = document.getElementById('output');
+            const div = document.createElement('div');
+            div.textContent = `${new Date().toLocaleTimeString()}: ${message}`;
+            output.appendChild(div);
+        }
+
+        // Track page load
+        log('PX Platform SDK initialized');
+    </script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+# Epic 1: Event Tracking Foundation
+# Docker Compose para desenvolvimento local
+
+version: '3.8'
+
+services:
+  # US-002: API de Ingestão
+  px-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=true
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - kafka
+      - redis
+    volumes:
+      - ./src/api:/app/src/api
+
+  # US-003: Processamento de Eventos
+  px-processor:
+    build:
+      context: .
+      dockerfile: Dockerfile.processor
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - CLICKHOUSE_URL=http://clickhouse:8123
+    depends_on:
+      - kafka
+      - clickhouse
+    volumes:
+      - ./src/processing:/app/src/processing
+
+  # Message Queue
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  # Cache
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+
+  # Event Store (simplified for MVP)
+  clickhouse:
+    image: clickhouse/clickhouse-server:23.8
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    environment:
+      CLICKHOUSE_DB: px_platform
+      CLICKHOUSE_USER: default
+      CLICKHOUSE_PASSWORD: ""
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  # SDK Development Server
+  sdk-dev:
+    image: node:18-alpine
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./src/sdk/web:/app
+    command: >
+      sh -c "
+        npm install &&
+        npm run dev
+      "
+
+volumes:
+  clickhouse_data:
